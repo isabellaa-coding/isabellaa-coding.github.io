@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isabella</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAF6EF;
+    --surface: #FFFFFF;
+    --surface-tint: #F1EDE3;
+    --ink: #2A3530;
+    --ink-soft: #5B6660;
+    --sage: #6F8F7C;
+    --sage-deep: #4E6D5B;
+    --coral: #E28F7D;
+    --coral-soft: #F3D9D1;
+    --line: #E3DDCE;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Karla', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { font-family: 'Fraunces', serif; font-weight: 500; color: var(--ink); }
+
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- Vitals line signature element ---------- */
+  .vitals {
+    width: 100%;
+    height: 36px;
+    overflow: hidden;
+  }
+  .vitals svg { width: 100%; height: 100%; display: block; }
+  .vitals path {
+    fill: none;
+    stroke: var(--sage);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 340;
+    stroke-dashoffset: 340;
+    animation: draw 3.2s ease-in-out infinite;
+  }
+  @keyframes draw {
+    0% { stroke-dashoffset: 340; }
+    45% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -340; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vitals path { animation: none; stroke-dashoffset: 0; }
+  }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(250, 246, 239, 0.9);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-name { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.1rem; }
+  .nav-links { display: flex; gap: 28px; font-size: 0.92rem; color: var(--ink-soft); }
+  .nav-links a:hover { color: var(--sage-deep); }
+
+  /* ---------- Hero ---------- */
+  header.hero { padding: 88px 0 40px; }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .eyebrow .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--coral);
+    display: inline-block;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  h1.name {
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    line-height: 1.05;
+    max-width: 12ch;
+  }
+  .hero-sub {
+    margin-top: 22px;
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+  .hero-actions {
+    margin-top: 32px;
+    display: flex; gap: 14px; flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    border: 1px solid var(--line);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--sage-deep); color: #fff; border-color: var(--sage-deep); }
+  .btn-primary:hover { background: var(--ink); border-color: var(--ink); }
+  .btn-ghost { background: transparent; color: var(--ink); }
+  .btn-ghost:hover { border-color: var(--sage-deep); color: var(--sage-deep); }
+
+  /* ---------- Section shared ---------- */
+  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+  }
+
+  /* ---------- About ---------- */
+  .about-text { max-width: 66ch; font-size: 1.02rem; color: var(--ink-soft); }
+  .about-text p + p { margin-top: 16px; }
+  .about-text strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Skills ---------- */
+  .skill-groups {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 6px;
+  }
+  .skill-group h3 { font-size: 0.98rem; margin-bottom: 12px; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--surface-tint);
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+  }
+
+  /* ---------- Projects ---------- */
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 22px;
+  }
+  .project-head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .project-head h3 { font-size: 1.35rem; }
+  .status-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 5px 11px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .status-live { background: #E3EEE7; color: var(--sage-deep); }
+  .status-soon { background: var(--coral-soft); color: #A85A46; }
+
+  .project-desc { color: var(--ink-soft); max-width: 62ch; margin-bottom: 22px; }
+
+  .readout {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+  .readout-cell {
+    background: var(--surface);
+    padding: 16px 14px;
+  }
+  .readout-cell .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--sage-deep);
+  }
+  .readout-cell .label {
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+
+  .project-links { display: flex; gap: 16px; flex-wrap: wrap; }
+  .project-links a {
+    font-size: 0.9rem; font-weight: 600; color: var(--sage-deep);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .project-links a:hover { color: var(--ink); }
+
+  .placeholder-card {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 140px;
+    border: 1.5px dashed var(--line);
+    border-radius: var(--radius);
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    text-align: center;
+    padding: 24px;
+  }
+
+  /* ---------- Contact ---------- */
+  .contact-links {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    margin-top: 8px;
+  }
+  .contact-card {
+    flex: 1; min-width: 220px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .contact-card:hover { border-color: var(--sage-deep); transform: translateY(-2px); }
+  .contact-card .k { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; }
+  .contact-card .v { font-size: 1.02rem; font-weight: 600; margin-top: 6px; }
+
+  footer {
+    padding: 40px 0 60px;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 720px) {
+    .skill-groups { grid-template-columns: 1fr; }
+    .readout { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-name">Isabella</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1 class="name">Isabella</h1>
+    <p class="hero-sub">I'm a Registered Nurse, self-taught in SQL, Excel, and Python, building healthcare-related projects as I work toward a career in analytics.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">View my work</a>
+      <a href="#contact" class="btn btn-ghost">Get in touch</a>
+    </div>
+  </div>
+  <div class="vitals wrap" style="margin-top:56px;">
+    <svg viewBox="0 0 900 36" preserveAspectRatio="none">
+      <path d="M0,18 L120,18 L150,18 L165,4 L180,32 L195,10 L210,18 L340,18 L360,18 L375,4 L390,32 L405,10 L420,18 L900,18" />
+    </svg>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-label">01 — About</div>
+    <div class="about-text">
+      <p>I worked as a <strong>Registered Nurse</strong> before deciding to move into healthcare analytics. Years at the bedside taught me how hospitals actually run — where care breaks down, what discharge planning really looks like, and what the data is describing behind the scenes.</p>
+      <p>Now I'm building the technical side on my own — self-studying <strong>SQL, Excel, and Python</strong>, with a focus on the kind of quality and operations metrics hospital systems track every day.</p>
+      <p>What I bring that a purely technical background doesn't: I know what the data is describing, not just how to query it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-label">02 — Skills</div>
+    <div class="skill-groups">
+      <div class="skill-group">
+        <h3>SQL</h3>
+        <div class="tag-list">
+          <span class="tag">CASE statements</span>
+          <span class="tag">Aggregate functions</span>
+          <span class="tag">JOINs</span>
+          <span class="tag">Window functions</span>
+          <span class="tag">CTEs</span>
+          <span class="tag">Views</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Excel</h3>
+        <div class="tag-list">
+          <span class="tag">XLOOKUP</span>
+          <span class="tag">INDEX/MATCH</span>
+          <span class="tag">PivotTables</span>
+          <span class="tag">SUMIF/COUNTIF</span>
+          <span class="tag">Nested IF</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Python</h3>
+        <div class="tag-list">
+          <span class="tag">Functions</span>
+          <span class="tag">Control flow</span>
+          <span class="tag">Loops</span>
+          <span class="tag">String manipulation</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Clinical Background</h3>
+        <div class="tag-list">
+          <span class="tag">Data quality</span>
+          <span class="tag">Care coordination</span>
+          <span class="tag">Quality metrics</span>
+          <span class="tag">Stakeholder context</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-label">03 — Projects</div>
+
+    <div class="project-card">
+      <div class="project-head">
+        <h3>Hospital Readmission SQL Analysis</h3>
+        <span class="status-badge status-live">Live</span>
+      </div>
+      <p class="project-desc">A SQL analysis of 125 simulated hospital encounters, evaluating 30-day readmission rates and identifying which patients carry the highest risk of returning.</p>
+
+      <div class="readout">
+        <div class="readout-cell">
+          <div class="num">16%</div>
+          <div class="label">Overall readmission rate</div>
+        </div>
+        <div class="readout-cell">
+          <div class="num">22.7%</div>
+          <div class="label">Heart Failure readmission rate</div>
+        </div>
+        <div class="readout-cell">
+          <div class="num">28.6%</div>
+          <div class="label">Diabetes + hypertension rate</div>
+        </div>
+        <div class="readout-cell">
+          <div class="num">27</div>
+          <div class="label">Patients flagged high-risk</div>
+        </div>
+      </div>
+
+      <div class="project-tags">
+        <span class="tag">MySQL</span>
+        <span class="tag">CASE statements</span>
+        <span class="tag">Window functions</span>
+        <span class="tag">Views</span>
+      </div>
+
+      <div class="project-links">
+        <a href="https://github.com/isabellaa-coding/Hospital-Readmission-SQL-Analysis" target="_blank">↗ View on GitHub</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-head">
+        <h3>Clinic Visit Data Cleanup & Dashboard</h3>
+        <span class="status-badge status-live">Live</span>
+      </div>
+      <p class="project-desc">Took a messy simulated clinic visit export and cleaned it up using formulas only — provider names typed a dozen different ways, mixed-case values, some missing wait times — then built a department-level dashboard on top of it. Nothing is typed in by hand, so it all updates automatically if the raw data changes.</p>
+
+      <p class="project-desc">I wanted to practice the kind of cleanup work that comes up constantly in real healthcare data. Every step is a formula, not a manual fix, which is the difference between a one-time cleanup and something that actually holds up when new data comes in.</p>
+
+      <div class="readout">
+        <div class="readout-cell">
+          <div class="num">40</div>
+          <div class="label">Visits cleaned</div>
+        </div>
+        <div class="readout-cell">
+          <div class="num">4</div>
+          <div class="label">Departments summarized</div>
+        </div>
+        <div class="readout-cell">
+          <div class="num">42.5%</div>
+          <div class="label">Overall no-show rate</div>
+        </div>
+        <div class="readout-cell">
+          <div class="num">340</div>
+          <div class="label">Formulas, zero hardcoded values</div>
+        </div>
+      </div>
+
+      <div class="project-tags">
+        <span class="tag">INDEX/MATCH</span>
+        <span class="tag">IFERROR</span>
+        <span class="tag">COUNTIFS</span>
+        <span class="tag">AVERAGEIFS</span>
+        <span class="tag">Text cleaning</span>
+      </div>
+
+      <div class="project-links">
+        <a href="clinic_visit_analysis.xlsx" download>↓ Download the file</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="section-label">04 — Contact</div>
+    <p class="about-text" style="margin-bottom: 20px;">Reach out any of these ways:</p>
+    <div class="contact-links">
+      <a class="contact-card" href="mailto:Isabella.a@alumni.emory.edu">
+        <div class="k">Email</div>
+        <div class="v">Isabella.a@alumni.emory.edu</div>
+      </a>
+      <a class="contact-card" href="https://www.linkedin.com/in/isabella-ashe/" target="_blank">
+        <div class="k">LinkedIn</div>
+        <div class="v">linkedin.com/in/isabella-ashe</div>
+      </a>
+      <a class="contact-card" href="https://github.com/isabellaa-coding" target="_blank">
+        <div class="k">GitHub</div>
+        <div class="v">github.com/isabellaa-coding</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Built by Isabella
+  </div>
+</footer>
+
+</body>
+</html>
